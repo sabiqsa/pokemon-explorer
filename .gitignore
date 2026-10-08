@@ -1,0 +1,13 @@
+# dependencies
+node_modules/
+
+# env files
+.env*
+
+# local custom pokemon storage (dev data)
+apps/pokemon/data/
+
+# misc
+.DS_Store
+*.tsbuildinfo
+coverage/
