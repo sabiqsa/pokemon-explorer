@@ -1,8 +1,7 @@
-// Pure validation for the "add custom pokemon" form. Runs on the server inside the action.
+import { toSlug } from "@pokedex/shared";
 import type { NewCustomPokemon } from "@/features/pokemon/data/repository";
 import type { StatName } from "@/features/pokemon/types";
 import { MAX_TYPES, NAME_MAX_LENGTH, NAME_PATTERN, STAT_MAX, STAT_MIN, STAT_NAMES } from "@/features/pokemon/config/constants";
-import { toSlug } from "@/features/pokemon/utils/helper";
 
 export type NewPokemonField = "name" | "types" | "abilities" | StatName;
 export type FieldErrors = Partial<Record<NewPokemonField, string>>;

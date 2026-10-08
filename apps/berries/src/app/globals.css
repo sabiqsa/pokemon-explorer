@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @source "../../../../packages/ui/src";
 
-/* `dark:` follows <html data-theme="dark"> (set by ThemeScript / ThemeToggle), not the OS setting. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant fit-screen (@media (min-width: 64rem) and (min-height: 50rem));
 
 :root {
   --background: #fcf0da;

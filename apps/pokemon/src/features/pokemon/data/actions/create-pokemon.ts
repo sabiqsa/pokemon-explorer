@@ -1,5 +1,6 @@
 "use server";
 
+import { saveErrorMessage } from "@pokedex/shared";
 import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { addCustomPokemon, getTakenNames, getTypeNames } from "@/features/pokemon/data/services/pokemon-service";
@@ -9,7 +10,7 @@ import { CUSTOM_POKEMON_TAG, STAT_NAMES } from "@/features/pokemon/config/consta
 
 export type CreatePokemonState = {
   errors?: FieldErrors;
-  /** Echoed back so the form can keep what the user typed after a failed submit. */
+  formError?: string;
   values?: RawNewPokemon;
 };
 
@@ -31,6 +32,8 @@ export async function createPokemon(
   _previous: CreatePokemonState,
   formData: FormData,
 ): Promise<CreatePokemonState> {
+  if (!(formData instanceof FormData)) return { formError: "Invalid form submission." };
+
   const values = readForm(formData);
   const [validTypes, takenNames] = await Promise.all([getTypeNames(), getTakenNames()]);
   const result = validateNewPokemon(values, {
@@ -40,8 +43,14 @@ export async function createPokemon(
 
   if (!result.ok) return { errors: result.errors, values };
 
-  const pokemon = await addCustomPokemon(result.value);
-  // Expire the cached custom list now, so the list and detail pages show the new entry immediately.
+  let pokemon;
+  try {
+    pokemon = await addCustomPokemon(result.value);
+  } catch (error) {
+    console.error(error);
+    return { formError: saveErrorMessage(error, "pokemon"), values };
+  }
+
   updateTag(CUSTOM_POKEMON_TAG);
   redirect(`/${pokemon.name}`);
 }

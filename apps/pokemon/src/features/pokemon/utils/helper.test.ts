@@ -1,18 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { displayId, displayName, toSlug } from "./helper";
-
-describe("toSlug", () => {
-  it("lowercases, trims and hyphenates spaces", () => {
-    expect(toSlug("  Mr   Mime ")).toBe("mr-mime");
-  });
-});
-
-describe("displayName", () => {
-  it("title-cases each hyphenated part", () => {
-    expect(displayName("mr-mime")).toBe("Mr Mime");
-    expect(displayName("pikachu")).toBe("Pikachu");
-  });
-});
+import { displayId } from "./helper";
 
 describe("displayId", () => {
   it("zero-pads PokéAPI IDs to four digits without truncating longer ones", () => {

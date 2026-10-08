@@ -5,7 +5,6 @@ import type { PokemonDetail } from "@/features/pokemon/types";
 import { CUSTOM_ID_PREFIX } from "@/features/pokemon/config/constants";
 import type { CustomPokemonRepository, NewCustomPokemon } from "./custom-pokemon-repository";
 
-/** Stores custom pokemon in one JSON file. Fine for local dev; not safe for concurrent writers. */
 export function createJsonCustomPokemonRepository(filePath: string): CustomPokemonRepository {
   async function readAll(): Promise<PokemonDetail[]> {
     try {

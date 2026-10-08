@@ -1,12 +1,8 @@
-"use client";
+'use client';
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
 
-/**
- * Returns a function that merges `updates` into the current query string.
- * `null` or "" removes a key. Uses `replace` so typing doesn't spam history.
- */
 export function useUpdateSearchParams() {
   const router = useRouter();
   const pathname = usePathname();
@@ -20,7 +16,9 @@ export function useUpdateSearchParams() {
         else next.delete(key);
       }
       const query = next.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+      router.replace(query ? `${pathname}?${query}` : pathname, {
+        scroll: false,
+      });
     },
     [router, pathname, searchParams],
   );

@@ -3,7 +3,6 @@ import { createJsonCustomPokemonRepository } from "./json-custom-pokemon-reposit
 
 export type { CustomPokemonRepository, NewCustomPokemon } from "./custom-pokemon-repository";
 
-// `next dev` runs with the app folder as cwd, so this lands in apps/pokemon/data/.
 export const customPokemonRepository = createJsonCustomPokemonRepository(
   path.join(process.cwd(), "data", "custom-pokemon.json"),
 );

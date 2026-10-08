@@ -1,4 +1,3 @@
-// Raw PokéAPI calls. Responses are returned as-is; mapping happens in ../mappers.
 import { cacheLife, cacheTag } from "next/cache";
 import {
   ALL_POKEMON_LIMIT,
@@ -35,7 +34,6 @@ async function getJson<T>(path: string): Promise<T | null> {
   return res.json() as Promise<T>;
 }
 
-/** Every pokemon name + URL. The roster rarely changes, so cache it for weeks. */
 export async function fetchAllPokemon(): Promise<ApiPokemonList> {
   "use cache";
   cacheLife("weeks");
@@ -46,11 +44,6 @@ export async function fetchAllPokemon(): Promise<ApiPokemonList> {
   return list;
 }
 
-/**
- * One pokemon by name, or null if PokéAPI doesn't know it.
- * Not cached here: the raw response is 300-700 KB (every move, game index, ...).
- * The service caches the mapped ~1 KB detail instead.
- */
 export async function fetchPokemon(name: string): Promise<ApiPokemon | null> {
   return getJson<ApiPokemon>(`/pokemon/${encodeURIComponent(name)}`);
 }

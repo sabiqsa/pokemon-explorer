@@ -1,42 +1,90 @@
-import Link from "next/link";
+import { ELLIPSIS, getPageItems } from '@pokedex/shared';
+import Image from 'next/image';
+import Link from 'next/link';
+import arrowIcon from '../Assets/arrow.png';
 
 type PaginationProps = {
   page: number;
   totalPages: number;
-  /** Build the URL for a page, so callers keep their own query params (search, filters). */
   hrefForPage: (page: number) => string;
 };
 
-/** Previous / next links plus "Page X of Y". Renders nothing when everything fits on one page. */
-export function Pagination({ page, totalPages, hrefForPage }: PaginationProps) {
-  if (totalPages <= 1) return null;
+const boxClass = 'inline-flex h-9 min-w-9 items-center justify-center rounded-md border px-2 text-sm';
+const linkClass = `${boxClass} border-zinc-300 hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800`;
+const currentClass = `${boxClass} border-red-600 bg-red-600 font-medium text-white`;
+const disabledClass = `${boxClass} border-zinc-200 opacity-40 dark:border-zinc-800`;
 
-  const linkClass = "rounded-md border border-zinc-300 px-3 py-1.5 text-sm hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800";
-  const disabledClass = "rounded-md border border-zinc-200 px-3 py-1.5 text-sm text-zinc-400 dark:border-zinc-800 dark:text-zinc-600";
+function Arrow({ direction }: { direction: 'prev' | 'next' }) {
+  return (
+    <Image
+      src={arrowIcon}
+      alt=""
+      width={16}
+      height={16}
+      className={`dark:invert ${direction === 'next' ? 'rotate-180' : ''}`}
+    />
+  );
+}
+
+function StepLink({ direction, href }: { direction: 'prev' | 'next'; href: string | null }) {
+  const label = direction === 'prev' ? 'Previous page' : 'Next page';
+  if (href === null) {
+    return (
+      <span className={disabledClass} aria-disabled="true" aria-label={label}>
+        <Arrow direction={direction} />
+      </span>
+    );
+  }
+  return (
+    <Link href={href} className={linkClass} rel={direction} aria-label={label}>
+      <Arrow direction={direction} />
+    </Link>
+  );
+}
+
+export function Pagination({ page, totalPages, hrefForPage }: PaginationProps) {
+  const items = getPageItems(page, totalPages);
+  if (items.length === 0) return null;
+
+  const prevLink = <StepLink direction="prev" href={page > 1 ? hrefForPage(page - 1) : null} />;
+  const nextLink = <StepLink direction="next" href={page < totalPages ? hrefForPage(page + 1) : null} />;
 
   return (
-    <nav aria-label="Pagination" className="flex items-center justify-center gap-3">
-      {page > 1 ? (
-        <Link href={hrefForPage(page - 1)} className={linkClass} rel="prev">
-          Previous
-        </Link>
-      ) : (
-        <span className={disabledClass} aria-disabled="true">
-          Previous
+    <nav
+      aria-label="Pagination"
+      className="sticky bottom-0 z-10 -mx-4 mt-auto flex shrink-0 justify-center border-t border-zinc-200 bg-background px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 dark:border-zinc-800"
+    >
+      <div className="flex items-center gap-3 sm:hidden">
+        {prevLink}
+        <span className="text-sm text-zinc-600 dark:text-zinc-400">
+          Page {page} of {totalPages}
         </span>
-      )}
-      <span className="text-sm text-zinc-600 dark:text-zinc-400">
-        Page {page} of {totalPages}
-      </span>
-      {page < totalPages ? (
-        <Link href={hrefForPage(page + 1)} className={linkClass} rel="next">
-          Next
-        </Link>
-      ) : (
-        <span className={disabledClass} aria-disabled="true">
-          Next
-        </span>
-      )}
+        {nextLink}
+      </div>
+
+      <ul className="hidden items-center gap-1.5 sm:flex">
+        <li>{prevLink}</li>
+        {items.map((item, i) =>
+          item === ELLIPSIS ? (
+            <li key={`ellipsis-${i}`} aria-hidden="true" className="px-1 text-zinc-500">
+              …
+            </li>
+          ) : (
+            <li key={item}>
+              {item === page ? (
+                <span className={currentClass} aria-current="page" aria-label={`Page ${item}`}>
+                  {item}
+                </span>
+              ) : (
+                <Link href={hrefForPage(item)} className={linkClass} aria-label={`Page ${item}`}>
+                  {item}
+                </Link>
+              )}
+            </li>
+          ),
+        )}
+        <li>{nextLink}</li>
+      </ul>
     </nav>
   );
 }

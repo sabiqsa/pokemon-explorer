@@ -13,7 +13,6 @@ import {
   STAT_NAMES,
 } from "@/features/pokemon/config/constants";
 
-
 function FieldError({ errors, field }: { errors: CreatePokemonState["errors"]; field: NewPokemonField }) {
   const message = errors?.[field];
   if (!message) return null;
@@ -29,7 +28,6 @@ export function PokemonForm({ types }: { types: string[] }) {
   const { errors, values } = state;
 
   return (
-    // Remount with the echoed values after a failed submit, since React resets the form after an action.
     <form key={JSON.stringify(values)} action={formAction} className="flex flex-col gap-6" noValidate>
       <div className="flex flex-col gap-1.5">
         <label htmlFor="name" className="font-medium">
@@ -110,6 +108,15 @@ export function PokemonForm({ types }: { types: string[] }) {
           ))}
         </div>
       </fieldset>
+
+      {state.formError && (
+        <p
+          role="alert"
+          className="rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300"
+        >
+          {state.formError}
+        </p>
+      )}
 
       <Button type="submit" disabled={isPending} className="self-start disabled:opacity-60">
         {isPending ? "Saving…" : "Add pokemon"}

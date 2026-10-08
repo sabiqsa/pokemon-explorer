@@ -4,8 +4,9 @@ node_modules/
 # env files
 .env*
 
-# local custom pokemon storage (dev data)
+# local custom pokemon/berry storage (dev data)
 apps/pokemon/data/
+apps/berries/data/
 
 # misc
 .DS_Store

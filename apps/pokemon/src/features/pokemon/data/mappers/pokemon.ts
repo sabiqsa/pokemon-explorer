@@ -1,16 +1,13 @@
-// Pure functions: PokéAPI shapes in, domain types out.
 import type { ApiNamedResource, ApiPokemon, ApiTypeList } from "@/features/pokemon/data/api/pokeapi";
 import type { PokemonDetail, PokemonStat, PokemonSummary, StatName } from "@/features/pokemon/types";
 import { ARTWORK_BASE_URL, NON_PLAYABLE_TYPES, STAT_NAMES } from "@/features/pokemon/config/constants";
 
-/** "https://pokeapi.co/api/v2/pokemon/25/" -> "25" */
 export function idFromResourceUrl(url: string): string {
   const id = url.match(/\/(\d+)\/?$/)?.[1];
   if (!id) throw new Error(`No ID in PokéAPI URL: ${url}`);
   return id;
 }
 
-/** Built from the ID so list cards never need a per-pokemon detail fetch. */
 export function artworkUrl(id: string): string {
   return `${ARTWORK_BASE_URL}/${id}.png`;
 }

@@ -1,6 +1,7 @@
-import { mkdtemp, rm } from "node:fs/promises";
+import { chmod, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { isStorageUnavailableError } from "@pokedex/shared";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { CUSTOM_ID_PREFIX } from "@/features/pokemon/config/constants";
 import { createJsonCustomPokemonRepository } from "./json-custom-pokemon-repository";
@@ -18,11 +19,11 @@ describe("JSON custom pokemon repository", () => {
 
   beforeEach(async () => {
     dir = await mkdtemp(path.join(tmpdir(), "custom-pokemon-"));
-    // Nested folder that doesn't exist yet, to check `create` makes it.
     filePath = path.join(dir, "data", "custom-pokemon.json");
   });
 
   afterEach(async () => {
+    await chmod(dir, 0o755);
     await rm(dir, { recursive: true, force: true });
   });
 
@@ -37,7 +38,6 @@ describe("JSON custom pokemon repository", () => {
     expect(created.id.startsWith(CUSTOM_ID_PREFIX)).toBe(true);
     expect(created).toMatchObject({ ...input, imageUrl: null, isCustom: true });
 
-    // A fresh instance reads it back from disk.
     expect(await createJsonCustomPokemonRepository(filePath).list()).toEqual([created]);
   });
 
@@ -63,4 +63,13 @@ describe("JSON custom pokemon repository", () => {
     await repo.create({ ...input, name: "voltmon" });
     expect((await repo.list()).map((p) => p.name)).toEqual(["sparkymon", "voltmon"]);
   });
+
+  it.skipIf(process.getuid?.() === 0)(
+    "fails with a storage-unavailable error when the folder is read-only (like a serverless deploy)",
+    async () => {
+      await chmod(dir, 0o555);
+      const error = await createJsonCustomPokemonRepository(filePath).create(input).catch((e: unknown) => e);
+      expect(isStorageUnavailableError(error)).toBe(true);
+    },
+  );
 });

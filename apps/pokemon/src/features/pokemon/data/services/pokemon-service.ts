@@ -1,12 +1,11 @@
-// Combines PokéAPI data with custom pokemon. Pages and actions call these, never the API or repository directly.
 import "server-only";
-import type { Paginated } from "@pokedex/shared";
+import type { PaginationResult } from "@pokedex/shared";
 import { cacheLife, cacheTag } from "next/cache";
 import { fetchAllPokemon, fetchPokemon, fetchTypes } from "@/features/pokemon/data/api/pokeapi";
 import { toPokemonDetail, toPokemonSummary, toTypeNames } from "@/features/pokemon/data/mappers/pokemon";
 import { customPokemonRepository, type NewCustomPokemon } from "@/features/pokemon/data/repository";
 import type { PokemonDetail, PokemonSummary } from "@/features/pokemon/types";
-import { CUSTOM_POKEMON_TAG, pokemonDetailTag } from "@/features/pokemon/config/constants";
+import { CUSTOM_POKEMON_TAG, NAME_PATTERN, pokemonDetailTag } from "@/features/pokemon/config/constants";
 import { mergePokemon, searchPokemon } from "./search";
 
 async function getCustomPokemon(): Promise<PokemonDetail[]> {
@@ -25,19 +24,19 @@ async function getAllPokemon(): Promise<PokemonSummary[]> {
   return mergePokemon(custom.map(toSummary), list.results.map(toPokemonSummary));
 }
 
-export async function getPokemonPage(query: string, page: number): Promise<Paginated<PokemonSummary>> {
+export async function getPokemonPage(query: string, page: number): Promise<PaginationResult<PokemonSummary>> {
   return searchPokemon(await getAllPokemon(), { query, page });
 }
 
-/** Custom pokemon win lookups; names can't collide because the action rejects taken names. */
 export async function getPokemonDetail(name: string): Promise<PokemonDetail | null> {
+  if (!NAME_PATTERN.test(name)) return null;
+
   const custom = (await getCustomPokemon()).find((p) => p.name === name);
   if (custom) return custom;
 
   return getApiPokemonDetail(name);
 }
 
-/** Caches the mapped detail, not PokéAPI's raw response, so far more entries fit in the cache. */
 async function getApiPokemonDetail(name: string): Promise<PokemonDetail | null> {
   "use cache";
   cacheLife("weeks");

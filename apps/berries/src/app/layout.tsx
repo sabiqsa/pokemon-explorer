@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ThemeScript, ThemeToggle } from "@pokedex/ui";
+import { Footer, Navbar, ThemeScript } from "@pokedex/ui";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -23,17 +23,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      // ThemeScript sets data-theme before hydration, so the attributes differ on purpose.
       suppressHydrationWarning
     >
       <head>
         <ThemeScript />
       </head>
-      <body className="min-h-full flex flex-col">
-        <div className="flex justify-end px-4 pt-4">
-          <ThemeToggle />
-        </div>
-        {children}
+      <body className="min-h-full flex flex-col fit-screen:has-[[data-fit-screen]]:h-dvh">
+        <Navbar active="berries" />
+        <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+        <Footer />
       </body>
     </html>
   );

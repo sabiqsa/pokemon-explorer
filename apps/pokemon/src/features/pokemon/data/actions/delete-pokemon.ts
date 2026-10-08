@@ -1,22 +1,26 @@
 "use server";
 
+import { saveErrorMessage } from "@pokedex/shared";
+import type { DeleteState } from "@pokedex/ui";
 import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { CUSTOM_ID_PREFIX, CUSTOM_POKEMON_TAG } from "@/features/pokemon/config/constants";
 import { deleteCustomPokemon } from "@/features/pokemon/data/services/pokemon-service";
 
-export type DeletePokemonState = { error?: string };
-
-// Bound to the ID in the form; useActionState's previous state and form data are not needed.
-export async function deletePokemon(id: string): Promise<DeletePokemonState> {
-  // Checked on the server, so a crafted request can't target PokéAPI pokemon.
-  if (!id.startsWith(CUSTOM_ID_PREFIX)) {
+export async function deletePokemon(id: unknown): Promise<DeleteState> {
+  if (typeof id !== "string" || !id.startsWith(CUSTOM_ID_PREFIX)) {
     return { error: "Only custom pokemon can be deleted." };
   }
 
-  const deleted = await deleteCustomPokemon(id);
+  let deleted;
+  try {
+    deleted = await deleteCustomPokemon(id);
+  } catch (error) {
+    console.error(error);
+    return { error: saveErrorMessage(error, "pokemon") };
+  }
   if (!deleted) {
-    return { error: "This pokemon was already deleted." };
+    return { error: "This pokemon doesn't exist or was already deleted." };
   }
 
   updateTag(CUSTOM_POKEMON_TAG);

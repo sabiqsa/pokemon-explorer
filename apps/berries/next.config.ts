@@ -3,10 +3,23 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   basePath: "/berries",
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
   transpilePackages: ["@pokedex/ui", "@pokedex/shared"],
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
+        pathname: "/PokeAPI/sprites/**",
+      },
+    ],
+  },
   turbopack: {
     root: path.join(__dirname, "../.."),
     rules: {

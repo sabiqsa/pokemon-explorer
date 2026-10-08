@@ -3,11 +3,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   basePath: "/pokemon",
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
   transpilePackages: ["@pokedex/ui", "@pokedex/shared"],
-  // Dev only: print each server-side fetch (PokéAPI calls) with its full URL in the terminal.
   logging: {
     fetches: {
       fullUrl: true,
