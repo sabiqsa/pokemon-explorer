@@ -14,5 +14,11 @@
   },
   "dependencies": {
     "@pokedex/shared": "*"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5"
   }
 }

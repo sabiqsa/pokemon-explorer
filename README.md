@@ -43,7 +43,7 @@ Shared across both: navbar, light/dark theme, loading skeletons and image placeh
 
 ## Getting started
 
-**Prerequisites:** Node.js ≥ 20.9 (required by Next.js 16) and Yarn 1.22.
+**Prerequisites:** Node.js 22.12+ or 24+ (required by Vitest 5; Next.js 16 alone needs 20.9+) and Yarn 1.22.
 
 ```bash
 yarn install
@@ -68,16 +68,18 @@ The `.env.example` defaults work locally as-is. Custom entries are saved to `app
 
 ## Scripts
 
+Run from the repo root:
+
 | Command | What it does |
 | --- | --- |
 | `yarn dev` | Runs host, pokemon and berries together (`concurrently`). |
+| `yarn typecheck` | Type-checks every workspace (`apps/*` run `next typegen` first, so it works on a fresh clone). |
+| `yarn lint` | ESLint for every app. |
 | `yarn test` | Runs every unit test once (Vitest). |
 | `yarn test:watch` | Vitest in watch mode. |
-| `yarn vitest run --project pokemon` | Tests for one project (`pokemon`, `berries` or `packages`). |
-| `yarn workspace <app> lint` | ESLint for one app (`host`, `pokemon`, `berries`). |
-| `yarn workspace <app> build` | Production build for one app. |
-| `yarn workspace <app> next typegen && yarn tsc --noEmit -p apps/<app>` | Type-check one app. `typegen` creates the route types (`PageProps`, `LayoutProps`) that a fresh clone doesn't have yet. |
-| `yarn tsc --noEmit -p packages/<ui\|shared>` | Type-check a shared package. |
+| `yarn build` | Production build of host, pokemon and berries. `packages/*` are source-only and get compiled by the apps. |
+
+For a single workspace: `yarn workspace <name> <script>` (e.g. `yarn workspace pokemon lint`), or `yarn vitest run --project <pokemon|berries|packages|dom>` for its tests.
 
 ## Architecture
 
