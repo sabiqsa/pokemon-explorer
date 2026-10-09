@@ -178,8 +178,9 @@ Three Vercel projects from this repo, one per app, with **Root Directory** set t
 | `CUSTOM_STORAGE_READONLY` | | `true` | `true` |
 
 - **`POKEMON_URL` / `BERRIES_URL`:** in development they default to `http://localhost:3002` and `http://localhost:3001`. A production build fails with a clear error if either is missing or doesn't start with `http(s)://`; a trailing slash is removed (`apps/host/next.config.ts`).
+- **`NEXT_PUBLIC_HOST_URL` on the zones** is also what lets Server Actions work through the host. Next.js rejects an action whose `Origin` host differs from the zone's own host, and in production the browser's origin is the host domain. Each zone adds that hostname (plus `localhost:3000` for dev) to `experimental.serverActions.allowedOrigins` in its `next.config.ts`. Without it, add/delete through the host fails with "Invalid Server Actions request".
 
-Env values are read at build time (rewrites, `NEXT_PUBLIC_*` inlining, the prerendered `/new` page), so set them before deploying and redeploy after changing them.
+Env values are read at build time (rewrites, `NEXT_PUBLIC_*` inlining, `allowedOrigins`, the prerendered `/new` page), so set them before deploying and redeploy after changing them.
 
 ## Testing
 
