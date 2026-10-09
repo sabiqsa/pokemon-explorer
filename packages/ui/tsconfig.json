@@ -11,7 +11,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "types": ["next/image-types/global"]
+    "types": ["node", "next/image-types/global"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

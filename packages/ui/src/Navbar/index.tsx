@@ -1,3 +1,4 @@
+import { hostUrl } from '@pokedex/shared';
 import Image from 'next/image';
 import pikachuIcon from '../Assets/pikachu.png';
 import { ThemeToggle } from '../ThemeToggle';
@@ -14,6 +15,8 @@ const MENU: {
 ];
 
 export function Navbar({ active }: { active?: NavbarSection }) {
+  const hostBase = process.env.NEXT_PUBLIC_HOST_URL;
+
   return (
     <header className="border-b border-zinc-200 bg-white/70 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/70">
       <nav
@@ -21,7 +24,7 @@ export function Navbar({ active }: { active?: NavbarSection }) {
         className="mx-auto flex w-full max-w-5xl items-center gap-2 px-4 py-3 sm:gap-6"
       >
         <a
-          href="/"
+          href={hostUrl('/', hostBase)}
           aria-current={active === 'home' ? 'page' : undefined}
           className="mr-auto flex items-center gap-2 rounded-md font-semibold"
         >
@@ -42,7 +45,7 @@ export function Navbar({ active }: { active?: NavbarSection }) {
             return (
               <li key={item.section}>
                 <a
-                  href={item.href}
+                  href={hostUrl(item.href, hostBase)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                     isActive

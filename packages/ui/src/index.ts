@@ -2,6 +2,7 @@ export { BackLink } from "./BackLink";
 export { Badge } from "./Badge";
 export { Button } from "./Button";
 export { Card } from "./Card";
+export { CatalogCard } from "./CatalogCard";
 export {
   CatalogCount,
   CatalogEmpty,

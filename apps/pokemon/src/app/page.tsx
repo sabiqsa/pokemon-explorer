@@ -1,5 +1,6 @@
-import { buildPageHref, firstParam, parsePage } from "@pokedex/shared";
+import { buildPageHref, displayName, firstParam, parsePage } from "@pokedex/shared";
 import {
+  CatalogCard,
   CatalogCount,
   CatalogEmpty,
   CatalogGrid,
@@ -13,7 +14,6 @@ import {
 } from "@pokedex/ui";
 import Link from "next/link";
 import { Suspense } from "react";
-import { PokemonCard } from "@/features/pokemon/components/PokemonCard";
 import { getPokemonPage } from "@/features/pokemon/data/services/pokemon-service";
 
 export default function PokemonListPage({ searchParams }: PageProps<"/">) {
@@ -69,7 +69,12 @@ async function PokemonResults({ searchParams }: Pick<PageProps<"/">, "searchPara
       <CatalogGrid>
         {result.items.map((pokemon) => (
           <li key={pokemon.id}>
-            <PokemonCard pokemon={pokemon} />
+            <CatalogCard
+              href={`/${pokemon.name}`}
+              name={displayName(pokemon.name)}
+              imageUrl={pokemon.imageUrl}
+              isCustom={pokemon.isCustom}
+            />
           </li>
         ))}
       </CatalogGrid>

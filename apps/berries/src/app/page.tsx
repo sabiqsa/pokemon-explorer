@@ -1,5 +1,6 @@
 import { buildPageHref, firstParam, parsePage } from "@pokedex/shared";
 import {
+  CatalogCard,
   CatalogCount,
   CatalogEmpty,
   CatalogGrid,
@@ -13,7 +14,7 @@ import {
 } from "@pokedex/ui";
 import Link from "next/link";
 import { Suspense } from "react";
-import { BerryCard } from "@/features/berries/components/BerryCard";
+import { berryDisplayName } from "@/features/berries/utils/helper";
 import { getBerryPage } from "@/features/berries/data/services/berry-service";
 
 export default function BerryListPage({ searchParams }: PageProps<"/">) {
@@ -70,7 +71,13 @@ async function BerryResults({ searchParams }: Pick<PageProps<"/">, "searchParams
       <CatalogGrid>
         {result.items.map((berry) => (
           <li key={berry.id}>
-            <BerryCard berry={berry} />
+            <CatalogCard
+              href={`/${berry.name}`}
+              name={berryDisplayName(berry.name)}
+              imageUrl={berry.imageUrl}
+              isCustom={berry.isCustom}
+              pixelated
+            />
           </li>
         ))}
       </CatalogGrid>
