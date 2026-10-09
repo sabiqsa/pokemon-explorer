@@ -9,6 +9,9 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    env:
+      POKEMON_URL: http://localhost:3002
+      BERRIES_URL: http://localhost:3001
     steps:
       - uses: actions/checkout@v4
 
