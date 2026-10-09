@@ -206,4 +206,14 @@ Logic tests run in Node; hook and component tests run in a separate `dom` projec
 
 - Data: [PokéAPI](https://pokeapi.co).
 - Pokémon artwork and item sprites: [PokeAPI/sprites](https://github.com/PokeAPI/sprites).
-- Icons (Pikachu, berries, Poké Ball, arrow) from [Flaticon](https://www.flaticon.com).
+- Theme toggle icons: `moon` from [Feather](https://feathericons.com) (MIT) and `sun` from [Lucide](https://lucide.dev) (ISC), inlined as SVG.
+- Icons from [Flaticon](https://www.flaticon.com):
+
+| Icon | Used for | Author | Source |
+| --- | --- | --- | --- |
+| Pikachu (`pikachu.png`) | Navbar logo in every zone, Pokémon card on the home page | Those Icons | [flaticon.com/free-icon/pikachu_528098](https://www.flaticon.com/free-icon/pikachu_528098) |
+| Pokeball (`pokeball.png`) | Favicon and Apple touch icon (`apps/*/src/app/icon.png`, `apple-icon.png`) | Those Icons | [flaticon.com/free-icon/pokeball_528101](https://www.flaticon.com/free-icon/pokeball_528101) |
+| Arrow (`arrow.png`) | Back links, pagination Previous/Next, "Explore" links on the home page | Kirill Kazachek | [flaticon.com/free-icon/arrow_507257](https://www.flaticon.com/free-icon/arrow_507257) |
+| Basket (`berries.png`) | Berries card on the home page | Retro cartoon | [flaticon.com/free-sticker/basket_14746805](https://www.flaticon.com/free-sticker/basket_14746805) |
+
+Icon files live in `packages/ui/src/Assets/`.
