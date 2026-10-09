@@ -19,8 +19,6 @@ const pokemonUrl = zoneUrl("POKEMON_URL", "http://localhost:3002");
 const berriesUrl = zoneUrl("BERRIES_URL", "http://localhost:3001");
 
 const nextConfig: NextConfig = {
-  cacheComponents: true,
-  partialPrefetching: true,
   transpilePackages: ["@pokedex/ui", "@pokedex/shared"],
   async rewrites() {
     return [
