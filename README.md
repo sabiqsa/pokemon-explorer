@@ -189,7 +189,7 @@ Env values are read at build time (rewrites, `NEXT_PUBLIC_*` inlining, `allowedO
 yarn test
 ```
 
-160 tests in 22 files, all passing. They cover:
+164 tests in 23 files, all passing. They cover:
 
 - **Mappers:** PokéAPI → domain types, including missing data (`data/mappers/*.test.ts`).
 - **Search and pagination:** query normalization, filtering, page slicing (`data/services/search.test.ts`, `packages/shared/src/utils/pagination.test.ts`, `page-items.test.ts`).
@@ -199,7 +199,7 @@ yarn test
 - **Service:** the berry list makes exactly one PokéAPI request (`berry-service.test.ts`).
 - **Shared utils:** storage errors, host URLs, search params, text helpers (`packages/shared/src/utils/*.test.ts`).
 - **Hooks:** `useDebounce` with fake timers, `useUpdateSearchParams` with a mocked router (`packages/shared/src/hooks/*.test.ts`).
-- **Components:** `Pagination` ellipses, `aria-current`, disabled Previous/Next and links that keep `q` (`packages/ui/src/Pagination/Pagination.test.tsx`).
+- **Components:** `Pagination` ellipses, `aria-current`, disabled Previous/Next and links that keep `q`; `BackLink` returning to the list page and search a card or the add link was opened from (`packages/ui/src/Pagination/Pagination.test.tsx`, `BackLink/BackLink.test.tsx`).
 
 Logic tests run in Node; hook and component tests run in a separate `dom` project with happy-dom (`vitest.config.mts`).
 

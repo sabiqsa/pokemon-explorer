@@ -12,12 +12,6 @@ export function Footer() {
           </a>{' '}
           © 2026
         </p>
-        <p>
-          Icons from{' '}
-          <a href={`${REPO_URL}#credits`} className={linkClass}>
-            Flaticon
-          </a>
-        </p>
       </div>
     </footer>
   );

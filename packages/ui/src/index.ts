@@ -2,9 +2,9 @@ export { BackLink } from "./BackLink";
 export { Badge } from "./Badge";
 export { Button } from "./Button";
 export { Card } from "./Card";
+export { CatalogAddLink } from "./CatalogAddLink";
 export { CatalogCard } from "./CatalogCard";
 export {
-  CatalogAddLink,
   CatalogEmpty,
   CatalogGrid,
   CatalogGridSkeleton,
