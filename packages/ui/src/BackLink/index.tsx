@@ -6,7 +6,6 @@ import arrowIcon from "../Assets/arrow.png";
 export function BackLink({ href, children }: { href: string; children: ReactNode }) {
   return (
     <Link
-      prefetch={false}
       href={href}
       className="inline-flex items-center gap-1.5 self-start text-sm text-zinc-600 hover:underline dark:text-zinc-400"
     >

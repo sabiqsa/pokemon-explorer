@@ -98,7 +98,7 @@ flowchart LR
 
 ```
 apps/
-  host/       home page, rewrites to the zones (next.config.ts)
+  host/       home page, rewrites to the zones (next.config.ts, src/proxy.ts)
   pokemon/    Pokémon zone (basePath /pokemon)
   berries/    Berries zone (basePath /berries)
 packages/
@@ -160,7 +160,6 @@ Details are cached after mapping, not as raw responses (a raw Pokémon or berry 
 
 - **Hard navigation between zones.** Links across zones use plain `<a>`, so moving between Pokémon and Berries is a full page load.
 - **Zones are meant to be reached through the host.** Navbar links are built from `NEXT_PUBLIC_HOST_URL`, so they still point to the host when a zone is opened on its own domain.
-- **Links inside a zone don't prefetch.** On Vercel, segment prefetch requests (`Next-Router-Segment-Prefetch`) sent through the host hit the host's own segment routing and return 404 before the rewrite to the zone runs. Links use `prefetch={false}`, so each navigation waits for the server and shows its loading state.
 - **Not-found returns HTTP 200.** `notFound()` runs inside `<Suspense>` while the page streams, so the "not found" UI renders but the status code is already 200.
 - **JSON storage does not work on serverless.** The demo sets `CUSTOM_STORAGE_READONLY=true` to disable writes with a clear message. For production, swap the repository implementation for a database or KV store; services and actions stay the same.
 - **The Pokémon list mirrors `/pokemon` as is,** including alternate forms. Entries without official artwork show a fallback.
@@ -180,6 +179,7 @@ Three Vercel projects from this repo, one per app, with **Root Directory** set t
 
 - **`POKEMON_URL` / `BERRIES_URL`:** in development they default to `http://localhost:3002` and `http://localhost:3001`. A production build fails with a clear error if either is missing or doesn't start with `http(s)://`; a trailing slash is removed (`apps/host/next.config.ts`).
 - **`NEXT_PUBLIC_HOST_URL` on the zones** is also what lets Server Actions work through the host. Next.js rejects an action whose `Origin` host differs from the zone's own host, and in production the browser's origin is the host domain. Each zone adds that hostname (plus `localhost:3000` for dev) to `experimental.serverActions.allowedOrigins` in its `next.config.ts`. Without it, add/delete through the host fails with "Invalid Server Actions request".
+- **Client navigation through the host goes through `apps/host/src/proxy.ts`.** On Vercel, the host's own routing handles requests with the `RSC` header before the rewrites run: `/pokemon` becomes `/pokemon.rsc`, which no rewrite matches, and segment prefetches (`Next-Router-Segment-Prefetch`) look for the host's own `.segments` files. Both returned 404. The proxy forwards every `RSC` request under `/pokemon` and `/berries` straight to the zone with its headers intact, so navigation and prefetching work. Locally `next dev` and `next start` don't need it, since rewrites run before RSC handling there.
 
 Env values are read at build time (rewrites, `NEXT_PUBLIC_*` inlining, `allowedOrigins`, the prerendered `/new` page), so set them before deploying and redeploy after changing them.
 

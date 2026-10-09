@@ -38,7 +38,6 @@ export function CatalogHeader({ title, subtitle, search, action }: CatalogHeader
 export function CatalogAddLink({ href, label }: { href: string; label: string }) {
   return (
     <Link
-      prefetch={false}
       href={href}
       aria-label={label}
       className="block rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700 sm:px-4 sm:py-2 sm:text-base"

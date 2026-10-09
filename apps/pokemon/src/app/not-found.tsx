@@ -7,7 +7,7 @@ export default function NotFound() {
       <p className="text-zinc-600 dark:text-zinc-400">
         No pokemon goes by that name. Check the spelling or search the list.
       </p>
-      <Link prefetch={false} href="/" className="rounded-md bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700">
+      <Link href="/" className="rounded-md bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700">
         Back to all pokemon
       </Link>
     </main>
