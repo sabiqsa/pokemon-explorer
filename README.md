@@ -1,5 +1,7 @@
 # Pokémon Explorer
 
+[![CI](https://github.com/sabiqsa/pokemon-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/sabiqsa/pokemon-explorer/actions/workflows/ci.yml)
+
 A micro-frontend app for browsing Pokémon and berries from [PokéAPI](https://pokeapi.co), built as three Next.js zones in one Yarn monorepo.
 
 **Live demo:** <https://pokemon-explorer-mode.vercel.app>
