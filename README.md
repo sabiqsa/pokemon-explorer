@@ -172,10 +172,12 @@ Three Vercel projects from this repo, one per app, with **Root Directory** set t
 
 | Env | host | pokemon | berries |
 | --- | --- | --- | --- |
-| `POKEMON_URL` | pokemon project URL | | |
-| `BERRIES_URL` | berries project URL | | |
+| `POKEMON_URL` | pokemon project URL (required) | | |
+| `BERRIES_URL` | berries project URL (required) | | |
 | `NEXT_PUBLIC_HOST_URL` | host URL (optional) | host URL | host URL |
 | `CUSTOM_STORAGE_READONLY` | | `true` | `true` |
+
+- **`POKEMON_URL` / `BERRIES_URL`:** in development they default to `http://localhost:3002` and `http://localhost:3001`. A production build fails with a clear error if either is missing or doesn't start with `http(s)://`; a trailing slash is removed (`apps/host/next.config.ts`).
 
 Env values are read at build time (rewrites, `NEXT_PUBLIC_*` inlining, the prerendered `/new` page), so set them before deploying and redeploy after changing them.
 
