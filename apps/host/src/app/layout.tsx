@@ -28,9 +28,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <ThemeScript />
       </head>
-      <body className="min-h-full flex flex-col fit-screen:has-[[data-fit-screen]]:h-dvh">
+      <body className="min-h-full flex flex-col">
         <Navbar active="home" />
-        <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+        <div className="flex min-h-0 flex-auto flex-col">{children}</div>
         <Footer />
       </body>
     </html>

@@ -1,7 +1,7 @@
 import { buildPageHref, firstParam, parsePage } from "@pokedex/shared";
 import {
+  CatalogAddLink,
   CatalogCard,
-  CatalogCount,
   CatalogEmpty,
   CatalogGrid,
   CatalogGridSkeleton,
@@ -12,7 +12,6 @@ import {
   SearchInput,
   Skeleton,
 } from "@pokedex/ui";
-import Link from "next/link";
 import { Suspense } from "react";
 import { berryDisplayName } from "@/features/berries/utils/helper";
 import { getBerryPage } from "@/features/berries/data/services/berry-service";
@@ -27,11 +26,12 @@ export default function BerryListPage({ searchParams }: PageProps<"/">) {
             <SearchInput label="Search berries" />
           </Suspense>
         }
-        action={
-          <Link href="/new" className="block rounded-md bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700">
-            Add custom
-          </Link>
+        subtitle={
+          <Suspense fallback={<Skeleton className="mt-1 h-4 w-24 rounded" />}>
+            <BerryCount searchParams={searchParams} />
+          </Suspense>
         }
+        action={<CatalogAddLink href="/new" label="Add custom berry" />}
       />
 
       <Suspense fallback={<CatalogGridSkeleton />}>
@@ -64,10 +64,6 @@ async function BerryResults({ searchParams }: Pick<PageProps<"/">, "searchParams
 
   return (
     <CatalogResults>
-      <CatalogCount>
-        {result.total.toLocaleString("en-US")} {result.total === 1 ? "berry" : "berries"}
-          {query && ` matching “${query}”`}
-      </CatalogCount>
       <CatalogGrid>
         {result.items.map((berry) => (
           <li key={berry.id}>
@@ -83,5 +79,18 @@ async function BerryResults({ searchParams }: Pick<PageProps<"/">, "searchParams
       </CatalogGrid>
       <Pagination page={result.page} totalPages={result.totalPages} hrefForPage={(page) => buildPageHref(query, page)} />
     </CatalogResults>
+  );
+}
+
+async function BerryCount({ searchParams }: Pick<PageProps<"/">, "searchParams">) {
+  const params = await searchParams;
+  const query = firstParam(params.q) ?? "";
+  const { total } = await getBerryPage(query, parsePage(params.page));
+
+  return (
+    <p>
+      {total.toLocaleString("en-US")} {total === 1 ? "berry" : "berries"}
+      {query && ` matching “${query}”`}
+    </p>
   );
 }

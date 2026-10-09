@@ -2,7 +2,6 @@
 
 import { saveErrorMessage } from "@pokedex/shared";
 import { updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { addCustomPokemon, getTakenNames, getTypeNames } from "@/features/pokemon/data/services/pokemon-service";
 import { validateNewPokemon, type FieldErrors, type RawNewPokemon } from "@/features/pokemon/data/services/validate";
 import type { StatName } from "@/features/pokemon/types";
@@ -11,6 +10,7 @@ import { CUSTOM_POKEMON_TAG, STAT_NAMES } from "@/features/pokemon/config/consta
 export type CreatePokemonState = {
   errors?: FieldErrors;
   formError?: string;
+  createdName?: string;
   values?: RawNewPokemon;
 };
 
@@ -52,5 +52,5 @@ export async function createPokemon(
   }
 
   updateTag(CUSTOM_POKEMON_TAG);
-  redirect(`/${pokemon.name}`);
+  return { createdName: pokemon.name, values };
 }

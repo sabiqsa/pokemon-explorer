@@ -3,7 +3,6 @@
 import { saveErrorMessage } from "@pokedex/shared";
 import type { DeleteState } from "@pokedex/ui";
 import { updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { CUSTOM_ID_PREFIX, CUSTOM_POKEMON_TAG } from "@/features/pokemon/config/constants";
 import { deleteCustomPokemon } from "@/features/pokemon/data/services/pokemon-service";
 
@@ -24,5 +23,5 @@ export async function deletePokemon(id: unknown): Promise<DeleteState> {
   }
 
   updateTag(CUSTOM_POKEMON_TAG);
-  redirect("/");
+  return { deleted: true };
 }

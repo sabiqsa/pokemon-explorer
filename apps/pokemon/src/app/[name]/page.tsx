@@ -47,6 +47,7 @@ async function PokemonDetail({ params }: Pick<PageProps<"/[name]">, "params">) {
             title={`Delete ${displayName(pokemon.name)}?`}
             description="This permanently removes it from your custom pokemon. You can’t undo this."
             action={deletePokemon.bind(null, pokemon.id)}
+            redirectTo="/"
           />
         )}
 

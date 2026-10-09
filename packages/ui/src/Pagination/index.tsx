@@ -2,6 +2,7 @@ import { ELLIPSIS, getPageItems } from '@pokedex/shared';
 import Image from 'next/image';
 import Link from 'next/link';
 import arrowIcon from '../Assets/arrow.png';
+import { LinkPending } from '../LinkPending';
 
 type PaginationProps = {
   page: number;
@@ -37,7 +38,9 @@ function StepLink({ direction, href }: { direction: 'prev' | 'next'; href: strin
   }
   return (
     <Link href={href} className={linkClass} rel={direction} aria-label={label}>
-      <Arrow direction={direction} />
+      <LinkPending>
+        <Arrow direction={direction} />
+      </LinkPending>
     </Link>
   );
 }
@@ -52,7 +55,7 @@ export function Pagination({ page, totalPages, hrefForPage }: PaginationProps) {
   return (
     <nav
       aria-label="Pagination"
-      className="sticky bottom-0 z-10 -mx-4 mt-auto flex shrink-0 justify-center border-t border-zinc-200 bg-background px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 dark:border-zinc-800"
+      className="sticky bottom-0 z-10 -mx-4 flex fit-screen:mt-auto shrink-0 justify-center border-t border-zinc-200 bg-background px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 dark:border-zinc-800"
     >
       <div className="flex items-center gap-3 sm:hidden">
         {prevLink}
@@ -77,7 +80,7 @@ export function Pagination({ page, totalPages, hrefForPage }: PaginationProps) {
                 </span>
               ) : (
                 <Link href={hrefForPage(item)} className={linkClass} aria-label={`Page ${item}`}>
-                  {item}
+                  <LinkPending>{item}</LinkPending>
                 </Link>
               )}
             </li>

@@ -1,7 +1,8 @@
 "use client";
 
 import { Button, Input, Select } from "@pokedex/ui";
-import { useActionState } from "react";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useTransition } from "react";
 import { createBerry, type CreateBerryState } from "@/features/berries/data/actions/create-berry";
 import type { NewBerryField } from "@/features/berries/data/services/validate";
 import {
@@ -63,7 +64,14 @@ function NumberField({ name, label, min, max, defaultValue, errors }: NumberFiel
 
 export function BerryForm({ firmnesses }: { firmnesses: string[] }) {
   const [state, formAction, isPending] = useActionState(createBerry, {});
-  const { errors, values } = state;
+  const { errors, values, createdName } = state;
+  const router = useRouter();
+  const [isNavigating, startNavigation] = useTransition();
+  const isBusy = isPending || isNavigating || Boolean(createdName);
+
+  useEffect(() => {
+    if (createdName) startNavigation(() => router.push(`/${createdName}`));
+  }, [createdName, router]);
 
   return (
     <form key={JSON.stringify(values)} action={formAction} className="flex flex-col gap-6" noValidate>
@@ -186,8 +194,8 @@ export function BerryForm({ firmnesses }: { firmnesses: string[] }) {
         </p>
       )}
 
-      <Button type="submit" disabled={isPending} className="self-start disabled:opacity-60">
-        {isPending ? "Saving…" : "Add berry"}
+      <Button type="submit" disabled={isBusy} className="self-start disabled:opacity-60">
+        {isBusy ? "Saving…" : "Add berry"}
       </Button>
     </form>
   );

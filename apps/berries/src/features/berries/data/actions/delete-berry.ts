@@ -3,7 +3,6 @@
 import { saveErrorMessage } from "@pokedex/shared";
 import type { DeleteState } from "@pokedex/ui";
 import { updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { CUSTOM_BERRIES_TAG, CUSTOM_ID_PREFIX } from "@/features/berries/config/constants";
 import { deleteCustomBerry } from "@/features/berries/data/services/berry-service";
 
@@ -24,5 +23,5 @@ export async function deleteBerry(id: unknown): Promise<DeleteState> {
   }
 
   updateTag(CUSTOM_BERRIES_TAG);
-  redirect("/");
+  return { deleted: true };
 }

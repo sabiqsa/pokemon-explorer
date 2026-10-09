@@ -2,7 +2,6 @@
 
 import { saveErrorMessage } from "@pokedex/shared";
 import { updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { addCustomBerry, getFirmnessNames, getTakenNames } from "@/features/berries/data/services/berry-service";
 import { validateNewBerry, type FieldErrors, type RawNewBerry } from "@/features/berries/data/services/validate";
 import type { FlavorName } from "@/features/berries/types";
@@ -11,6 +10,7 @@ import { CUSTOM_BERRIES_TAG, FLAVOR_NAMES } from "@/features/berries/config/cons
 export type CreateBerryState = {
   errors?: FieldErrors;
   formError?: string;
+  createdName?: string;
   values?: RawNewBerry;
 };
 
@@ -52,5 +52,5 @@ export async function createBerry(_previous: CreateBerryState, formData: FormDat
   }
 
   updateTag(CUSTOM_BERRIES_TAG);
-  redirect(`/${berry.name}`);
+  return { createdName: berry.name, values };
 }

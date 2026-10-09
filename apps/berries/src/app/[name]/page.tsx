@@ -52,6 +52,7 @@ async function BerryDetail({ params }: Pick<PageProps<"/[name]">, "params">) {
             title={`Delete ${berryDisplayName(berry.name)}?`}
             description="This permanently removes it from your custom berries. You can’t undo this."
             action={deleteBerry.bind(null, berry.id)}
+            redirectTo="/"
           />
         )}
 

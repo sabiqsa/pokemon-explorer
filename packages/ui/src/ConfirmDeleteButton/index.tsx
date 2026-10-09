@@ -1,19 +1,32 @@
 "use client";
 
-import { useActionState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useState, useTransition } from "react";
 import { Button } from "../Button";
 
-export type DeleteState = { error?: string };
+export type DeleteState = { error?: string; deleted?: boolean };
 
 type ConfirmDeleteButtonProps = {
   title: string;
   description: string;
-  action: (state: DeleteState) => Promise<DeleteState>;
+  action: () => Promise<DeleteState>;
+  redirectTo: string;
 };
 
-export function ConfirmDeleteButton({ title, description, action }: ConfirmDeleteButtonProps) {
+export function ConfirmDeleteButton({ title, description, action, redirectTo }: ConfirmDeleteButtonProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [state, formAction, isPending] = useActionState(action, {});
+  const router = useRouter();
+  const [error, setError] = useState<string>();
+  const [isPending, startTransition] = useTransition();
+
+  function confirmDelete(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    startTransition(async () => {
+      const result = await action();
+      if (result.deleted) router.replace(redirectTo);
+      else setError(result.error);
+    });
+  }
 
   return (
     <>
@@ -34,16 +47,16 @@ export function ConfirmDeleteButton({ title, description, action }: ConfirmDelet
         }}
         className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-xl bg-white p-0 text-zinc-900 backdrop:bg-black/50 dark:bg-zinc-900 dark:text-zinc-100"
       >
-        <form action={formAction} className="flex flex-col gap-4 p-6">
+        <form onSubmit={confirmDelete} className="flex flex-col gap-4 p-6">
           <h2 id="delete-title" className="text-lg font-semibold">
             {title}
           </h2>
           <p id="delete-description" className="text-sm text-zinc-600 dark:text-zinc-400">
             {description}
           </p>
-          {state.error && (
+          {error && (
             <p role="alert" className="text-sm text-red-600">
-              {state.error}
+              {error}
             </p>
           )}
           <div className="flex justify-end gap-2">

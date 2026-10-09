@@ -1,7 +1,8 @@
 "use client";
 
 import { Button, Input } from "@pokedex/ui";
-import { useActionState } from "react";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useTransition } from "react";
 import { createPokemon, type CreatePokemonState } from "@/features/pokemon/data/actions/create-pokemon";
 import type { NewPokemonField } from "@/features/pokemon/data/services/validate";
 import {
@@ -25,7 +26,14 @@ function FieldError({ errors, field }: { errors: CreatePokemonState["errors"]; f
 
 export function PokemonForm({ types }: { types: string[] }) {
   const [state, formAction, isPending] = useActionState(createPokemon, {});
-  const { errors, values } = state;
+  const { errors, values, createdName } = state;
+  const router = useRouter();
+  const [isNavigating, startNavigation] = useTransition();
+  const isBusy = isPending || isNavigating || Boolean(createdName);
+
+  useEffect(() => {
+    if (createdName) startNavigation(() => router.push(`/${createdName}`));
+  }, [createdName, router]);
 
   return (
     <form key={JSON.stringify(values)} action={formAction} className="flex flex-col gap-6" noValidate>
@@ -118,8 +126,8 @@ export function PokemonForm({ types }: { types: string[] }) {
         </p>
       )}
 
-      <Button type="submit" disabled={isPending} className="self-start disabled:opacity-60">
-        {isPending ? "Saving…" : "Add pokemon"}
+      <Button type="submit" disabled={isBusy} className="self-start disabled:opacity-60">
+        {isBusy ? "Saving…" : "Add pokemon"}
       </Button>
     </form>
   );

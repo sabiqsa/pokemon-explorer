@@ -1,7 +1,7 @@
 import { buildPageHref, displayName, firstParam, parsePage } from "@pokedex/shared";
 import {
+  CatalogAddLink,
   CatalogCard,
-  CatalogCount,
   CatalogEmpty,
   CatalogGrid,
   CatalogGridSkeleton,
@@ -12,7 +12,6 @@ import {
   SearchInput,
   Skeleton,
 } from "@pokedex/ui";
-import Link from "next/link";
 import { Suspense } from "react";
 import { getPokemonPage } from "@/features/pokemon/data/services/pokemon-service";
 
@@ -26,11 +25,12 @@ export default function PokemonListPage({ searchParams }: PageProps<"/">) {
             <SearchInput label="Search pokemon" />
           </Suspense>
         }
-        action={
-          <Link href="/new" className="block rounded-md bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700">
-            Add custom
-          </Link>
+        subtitle={
+          <Suspense fallback={<Skeleton className="mt-1 h-4 w-24 rounded" />}>
+            <PokemonCount searchParams={searchParams} />
+          </Suspense>
         }
+        action={<CatalogAddLink href="/new" label="Add custom pokemon" />}
       />
 
       <Suspense fallback={<CatalogGridSkeleton />}>
@@ -63,9 +63,6 @@ async function PokemonResults({ searchParams }: Pick<PageProps<"/">, "searchPara
 
   return (
     <CatalogResults>
-      <CatalogCount>
-        {result.total.toLocaleString("en-US")} pokemon{query && ` matching “${query}”`}
-      </CatalogCount>
       <CatalogGrid>
         {result.items.map((pokemon) => (
           <li key={pokemon.id}>
@@ -80,5 +77,18 @@ async function PokemonResults({ searchParams }: Pick<PageProps<"/">, "searchPara
       </CatalogGrid>
       <Pagination page={result.page} totalPages={result.totalPages} hrefForPage={(page) => buildPageHref(query, page)} />
     </CatalogResults>
+  );
+}
+
+async function PokemonCount({ searchParams }: Pick<PageProps<"/">, "searchParams">) {
+  const params = await searchParams;
+  const query = firstParam(params.q) ?? "";
+  const { total } = await getPokemonPage(query, parsePage(params.page));
+
+  return (
+    <p>
+      {total.toLocaleString("en-US")} pokemon
+      {query && ` matching “${query}”`}
+    </p>
   );
 }

@@ -21,7 +21,7 @@ export function Navbar({ active }: { active?: NavbarSection }) {
     <header className="border-b border-zinc-200 bg-white/70 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/70">
       <nav
         aria-label="Main"
-        className="mx-auto flex w-full max-w-5xl items-center gap-2 px-4 py-3 sm:gap-6"
+        className="mx-auto flex w-full max-w-6xl items-center gap-2 px-4 py-3 sm:gap-6"
       >
         <a
           href={hostUrl('/', hostBase)}
