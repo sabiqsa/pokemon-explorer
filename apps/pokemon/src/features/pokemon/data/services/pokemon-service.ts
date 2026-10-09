@@ -3,16 +3,22 @@ import { isStorageReadOnly, type PaginationResult } from "@pokedex/shared";
 import { cacheLife, cacheTag } from "next/cache";
 import { fetchAllPokemon, fetchPokemon, fetchTypes } from "@/features/pokemon/data/api/pokeapi";
 import { toPokemonDetail, toPokemonSummary, toTypeNames } from "@/features/pokemon/data/mappers/pokemon";
-import { customPokemonRepository, type NewCustomPokemon } from "@/features/pokemon/data/repository";
+import {
+  getCustomPokemonRepository,
+  type CustomPokemonRepository,
+  type NewCustomPokemon,
+} from "@/features/pokemon/data/repository";
 import type { PokemonDetail, PokemonSummary } from "@/features/pokemon/types";
 import { CUSTOM_POKEMON_TAG, NAME_PATTERN, pokemonDetailTag } from "@/features/pokemon/config/constants";
 import { mergePokemon, searchPokemon } from "./search";
+
+const repository = (): CustomPokemonRepository => getCustomPokemonRepository();
 
 async function getCustomPokemon(): Promise<PokemonDetail[]> {
   "use cache";
   cacheLife("max");
   cacheTag(CUSTOM_POKEMON_TAG);
-  return customPokemonRepository.list();
+  return repository().list();
 }
 
 function toSummary({ id, name, imageUrl, isCustom }: PokemonDetail): PokemonSummary {
@@ -55,11 +61,11 @@ export async function getTakenNames(): Promise<Set<string>> {
 }
 
 export async function addCustomPokemon(input: NewCustomPokemon): Promise<PokemonDetail> {
-  return customPokemonRepository.create(input);
+  return repository().create(input);
 }
 
 export async function deleteCustomPokemon(id: string): Promise<boolean> {
-  return customPokemonRepository.delete(id);
+  return repository().delete(id);
 }
 
 export function isCustomStorageReadOnly(): boolean {

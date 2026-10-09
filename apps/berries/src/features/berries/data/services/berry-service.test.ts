@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 vi.mock("next/cache", () => ({ cacheLife: vi.fn(), cacheTag: vi.fn() }));
 vi.mock("@/features/berries/data/repository", () => ({
-  customBerryRepository: { list: vi.fn(async () => []), create: vi.fn(), delete: vi.fn() },
+  getCustomBerryRepository: () => ({ list: vi.fn(async () => []), create: vi.fn(), delete: vi.fn() }),
 }));
 
 const { getBerryDetail, getBerryPage } = await import("./berry-service");

@@ -9,11 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@pokedex/shared": "*",
+    "@pokedex/ui": "*",
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "@pokedex/ui": "*",
-    "@pokedex/shared": "*"
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",

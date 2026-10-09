@@ -3,16 +3,22 @@ import { isStorageReadOnly, type PaginationResult } from "@pokedex/shared";
 import { cacheLife, cacheTag } from "next/cache";
 import { fetchAllBerries, fetchBerry, fetchFirmnesses, fetchItem } from "@/features/berries/data/api/pokeapi";
 import { toBerryDetail, toBerrySummary, toFirmnessNames } from "@/features/berries/data/mappers/berry";
-import { customBerryRepository, type NewCustomBerry } from "@/features/berries/data/repository";
+import {
+  getCustomBerryRepository,
+  type CustomBerryRepository,
+  type NewCustomBerry,
+} from "@/features/berries/data/repository";
 import type { BerryDetail, BerrySummary } from "@/features/berries/types";
 import { berryDetailTag, CUSTOM_BERRIES_TAG, NAME_PATTERN } from "@/features/berries/config/constants";
 import { mergeBerries, searchBerries } from "./search";
+
+const repository = (): CustomBerryRepository => getCustomBerryRepository();
 
 async function getCustomBerries(): Promise<BerryDetail[]> {
   "use cache";
   cacheLife("max");
   cacheTag(CUSTOM_BERRIES_TAG);
-  return customBerryRepository.list();
+  return repository().list();
 }
 
 function toSummary({ id, name, imageUrl, isCustom }: BerryDetail): BerrySummary {
@@ -57,11 +63,11 @@ export async function getTakenNames(): Promise<Set<string>> {
 }
 
 export async function addCustomBerry(input: NewCustomBerry): Promise<BerryDetail> {
-  return customBerryRepository.create(input);
+  return repository().create(input);
 }
 
 export async function deleteCustomBerry(id: string): Promise<boolean> {
-  return customBerryRepository.delete(id);
+  return repository().delete(id);
 }
 
 export function isCustomStorageReadOnly(): boolean {
