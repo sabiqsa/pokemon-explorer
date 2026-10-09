@@ -7,7 +7,7 @@ import { deletePokemon } from "@/features/pokemon/data/actions/delete-pokemon";
 import { PokemonDetailSkeleton } from "@/features/pokemon/components/PokemonDetailSkeleton";
 import { StatBar } from "@/features/pokemon/components/StatBar";
 import { TypeBadge } from "@/features/pokemon/components/TypeBadge";
-import { getPokemonDetail } from "@/features/pokemon/data/services/pokemon-service";
+import { getPokemonDetail, isCustomStorageReadOnly } from "@/features/pokemon/data/services/pokemon-service";
 
 export default function PokemonDetailPage({ params }: PageProps<"/[name]">) {
   return (
@@ -42,7 +42,7 @@ async function PokemonDetail({ params }: Pick<PageProps<"/[name]">, "params">) {
           </div>
         </header>
 
-        {pokemon.isCustom && (
+        {pokemon.isCustom && !isCustomStorageReadOnly() && (
           <ConfirmDeleteButton
             title={`Delete ${displayName(pokemon.name)}?`}
             description="This permanently removes it from your custom pokemon. You can’t undo this."

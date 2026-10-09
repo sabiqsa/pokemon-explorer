@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { BerryDetailSkeleton } from "@/features/berries/components/BerryDetailSkeleton";
 import { deleteBerry } from "@/features/berries/data/actions/delete-berry";
 import { FlavorBar } from "@/features/berries/components/FlavorBar";
-import { getBerryDetail } from "@/features/berries/data/services/berry-service";
+import { getBerryDetail, isCustomStorageReadOnly } from "@/features/berries/data/services/berry-service";
 import { EMPTY_VALUE } from "@/features/berries/config/constants";
 import { berryDisplayName, displayId, formatValue } from "@/features/berries/utils/helper";
 
@@ -47,7 +47,7 @@ async function BerryDetail({ params }: Pick<PageProps<"/[name]">, "params">) {
           </div>
         </header>
 
-        {berry.isCustom && (
+        {berry.isCustom && !isCustomStorageReadOnly() && (
           <ConfirmDeleteButton
             title={`Delete ${berryDisplayName(berry.name)}?`}
             description="This permanently removes it from your custom berries. You can’t undo this."

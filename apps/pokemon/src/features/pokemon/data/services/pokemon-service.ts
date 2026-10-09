@@ -1,5 +1,5 @@
 import "server-only";
-import type { PaginationResult } from "@pokedex/shared";
+import { isStorageReadOnly, type PaginationResult } from "@pokedex/shared";
 import { cacheLife, cacheTag } from "next/cache";
 import { fetchAllPokemon, fetchPokemon, fetchTypes } from "@/features/pokemon/data/api/pokeapi";
 import { toPokemonDetail, toPokemonSummary, toTypeNames } from "@/features/pokemon/data/mappers/pokemon";
@@ -60,4 +60,8 @@ export async function addCustomPokemon(input: NewCustomPokemon): Promise<Pokemon
 
 export async function deleteCustomPokemon(id: string): Promise<boolean> {
   return customPokemonRepository.delete(id);
+}
+
+export function isCustomStorageReadOnly(): boolean {
+  return isStorageReadOnly(process.env.CUSTOM_STORAGE_READONLY);
 }

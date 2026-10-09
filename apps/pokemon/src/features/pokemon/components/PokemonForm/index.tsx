@@ -24,7 +24,7 @@ function FieldError({ errors, field }: { errors: CreatePokemonState["errors"]; f
   );
 }
 
-export function PokemonForm({ types }: { types: string[] }) {
+export function PokemonForm({ types, readOnly = false }: { types: string[]; readOnly?: boolean }) {
   const [state, formAction, isPending] = useActionState(createPokemon, {});
   const { errors, values, createdName } = state;
   const router = useRouter();
@@ -126,7 +126,7 @@ export function PokemonForm({ types }: { types: string[] }) {
         </p>
       )}
 
-      <Button type="submit" disabled={isBusy} className="self-start disabled:opacity-60">
+      <Button type="submit" disabled={isBusy || readOnly} className="self-start disabled:opacity-60">
         {isBusy ? "Saving…" : "Add pokemon"}
       </Button>
     </form>

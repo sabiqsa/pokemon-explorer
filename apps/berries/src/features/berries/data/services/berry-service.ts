@@ -1,5 +1,5 @@
 import "server-only";
-import type { PaginationResult } from "@pokedex/shared";
+import { isStorageReadOnly, type PaginationResult } from "@pokedex/shared";
 import { cacheLife, cacheTag } from "next/cache";
 import { fetchAllBerries, fetchBerry, fetchFirmnesses, fetchItem } from "@/features/berries/data/api/pokeapi";
 import { toBerryDetail, toBerrySummary, toFirmnessNames } from "@/features/berries/data/mappers/berry";
@@ -62,4 +62,8 @@ export async function addCustomBerry(input: NewCustomBerry): Promise<BerryDetail
 
 export async function deleteCustomBerry(id: string): Promise<boolean> {
   return customBerryRepository.delete(id);
+}
+
+export function isCustomStorageReadOnly(): boolean {
+  return isStorageReadOnly(process.env.CUSTOM_STORAGE_READONLY);
 }

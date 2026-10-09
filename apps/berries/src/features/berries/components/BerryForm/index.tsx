@@ -62,7 +62,7 @@ function NumberField({ name, label, min, max, defaultValue, errors }: NumberFiel
   );
 }
 
-export function BerryForm({ firmnesses }: { firmnesses: string[] }) {
+export function BerryForm({ firmnesses, readOnly = false }: { firmnesses: string[]; readOnly?: boolean }) {
   const [state, formAction, isPending] = useActionState(createBerry, {});
   const { errors, values, createdName } = state;
   const router = useRouter();
@@ -194,7 +194,7 @@ export function BerryForm({ firmnesses }: { firmnesses: string[] }) {
         </p>
       )}
 
-      <Button type="submit" disabled={isBusy} className="self-start disabled:opacity-60">
+      <Button type="submit" disabled={isBusy || readOnly} className="self-start disabled:opacity-60">
         {isBusy ? "Saving…" : "Add berry"}
       </Button>
     </form>

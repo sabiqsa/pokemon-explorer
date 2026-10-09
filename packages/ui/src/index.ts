@@ -24,6 +24,7 @@ export { SearchInput } from "./SearchInput";
 export { Select } from "./Select";
 export { Skeleton } from "./Skeleton";
 export { Spinner } from "./Spinner";
+export { StorageReadOnlyNotice } from "./StorageReadOnlyNotice";
 export { ThemeScript } from "./ThemeScript";
 export { ThemeToggle } from "./ThemeToggle";
 export { THEME_STORAGE_KEY, type Theme } from "./theme";

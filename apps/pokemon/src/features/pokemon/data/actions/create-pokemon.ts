@@ -1,8 +1,8 @@
 "use server";
 
-import { saveErrorMessage } from "@pokedex/shared";
+import { saveErrorMessage, STORAGE_READ_ONLY_MESSAGE } from "@pokedex/shared";
 import { updateTag } from "next/cache";
-import { addCustomPokemon, getTakenNames, getTypeNames } from "@/features/pokemon/data/services/pokemon-service";
+import { addCustomPokemon, getTakenNames, getTypeNames, isCustomStorageReadOnly } from "@/features/pokemon/data/services/pokemon-service";
 import { validateNewPokemon, type FieldErrors, type RawNewPokemon } from "@/features/pokemon/data/services/validate";
 import type { StatName } from "@/features/pokemon/types";
 import { CUSTOM_POKEMON_TAG, STAT_NAMES } from "@/features/pokemon/config/constants";
@@ -32,6 +32,7 @@ export async function createPokemon(
   _previous: CreatePokemonState,
   formData: FormData,
 ): Promise<CreatePokemonState> {
+  if (isCustomStorageReadOnly()) return { formError: STORAGE_READ_ONLY_MESSAGE };
   if (!(formData instanceof FormData)) return { formError: "Invalid form submission." };
 
   const values = readForm(formData);
@@ -48,7 +49,7 @@ export async function createPokemon(
     pokemon = await addCustomPokemon(result.value);
   } catch (error) {
     console.error(error);
-    return { formError: saveErrorMessage(error, "pokemon"), values };
+    return { formError: saveErrorMessage(error), values };
   }
 
   updateTag(CUSTOM_POKEMON_TAG);

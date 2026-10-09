@@ -1,8 +1,8 @@
 "use server";
 
-import { saveErrorMessage } from "@pokedex/shared";
+import { saveErrorMessage, STORAGE_READ_ONLY_MESSAGE } from "@pokedex/shared";
 import { updateTag } from "next/cache";
-import { addCustomBerry, getFirmnessNames, getTakenNames } from "@/features/berries/data/services/berry-service";
+import { addCustomBerry, getFirmnessNames, getTakenNames, isCustomStorageReadOnly } from "@/features/berries/data/services/berry-service";
 import { validateNewBerry, type FieldErrors, type RawNewBerry } from "@/features/berries/data/services/validate";
 import type { FlavorName } from "@/features/berries/types";
 import { CUSTOM_BERRIES_TAG, FLAVOR_NAMES } from "@/features/berries/config/constants";
@@ -32,6 +32,7 @@ function readForm(formData: FormData): RawNewBerry {
 }
 
 export async function createBerry(_previous: CreateBerryState, formData: FormData): Promise<CreateBerryState> {
+  if (isCustomStorageReadOnly()) return { formError: STORAGE_READ_ONLY_MESSAGE };
   if (!(formData instanceof FormData)) return { formError: "Invalid form submission." };
 
   const values = readForm(formData);
@@ -48,7 +49,7 @@ export async function createBerry(_previous: CreateBerryState, formData: FormDat
     berry = await addCustomBerry(result.value);
   } catch (error) {
     console.error(error);
-    return { formError: saveErrorMessage(error, "berries"), values };
+    return { formError: saveErrorMessage(error), values };
   }
 
   updateTag(CUSTOM_BERRIES_TAG);

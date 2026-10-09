@@ -1,7 +1,26 @@
 import { describe, expect, it } from 'vitest';
-import { isStorageUnavailableError, saveErrorMessage } from './storage-errors';
+import {
+  GENERIC_SAVE_ERROR_MESSAGE,
+  isStorageReadOnly,
+  isStorageUnavailableError,
+  saveErrorMessage,
+  STORAGE_READ_ONLY_MESSAGE,
+} from './storage-errors';
 
 const fsError = (code: string) => Object.assign(new Error(code), { code });
+
+describe('isStorageReadOnly', () => {
+  it('is on only when the flag is explicitly "true"', () => {
+    expect(isStorageReadOnly('true')).toBe(true);
+    expect(isStorageReadOnly(' TRUE ')).toBe(true);
+  });
+
+  it('is off for anything else, including a missing flag', () => {
+    for (const flag of [undefined, '', 'false', '1', 'yes']) {
+      expect(isStorageReadOnly(flag)).toBe(false);
+    }
+  });
+});
 
 describe('isStorageUnavailableError', () => {
   it.each(['EROFS', 'EACCES', 'EPERM'])('treats %s as read-only storage', (code) => {
@@ -17,13 +36,12 @@ describe('isStorageUnavailableError', () => {
 });
 
 describe('saveErrorMessage', () => {
-  it('explains the demo deployment limit for read-only storage', () => {
-    expect(saveErrorMessage(fsError('EROFS'), 'pokemon')).toBe(
-      "Custom pokemon can't be saved on this demo deployment (its storage is read-only). Run the app locally to add or delete custom pokemon.",
-    );
+  it.each(['EROFS', 'EACCES', 'EPERM'])('explains read-only storage for %s', (code) => {
+    expect(saveErrorMessage(fsError(code))).toBe(STORAGE_READ_ONLY_MESSAGE);
   });
 
-  it('falls back to a generic message for anything else', () => {
-    expect(saveErrorMessage(new Error('boom'), 'berries')).toBe('Something went wrong while saving. Please try again.');
+  it('falls back to the generic message for any other error', () => {
+    expect(saveErrorMessage(fsError('ENOSPC'))).toBe(GENERIC_SAVE_ERROR_MESSAGE);
+    expect(saveErrorMessage(new Error('boom'))).toBe(GENERIC_SAVE_ERROR_MESSAGE);
   });
 });
