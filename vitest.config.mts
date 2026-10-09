@@ -20,6 +20,14 @@ export default defineConfig({
         test: {
           name: "packages",
           include: ["packages/*/src/**/*.test.ts"],
+          exclude: ["packages/shared/src/hooks/**"],
+        },
+      },
+      {
+        test: {
+          name: "dom",
+          environment: "happy-dom",
+          include: ["packages/shared/src/hooks/**/*.test.{ts,tsx}", "packages/ui/src/**/*.test.tsx"],
         },
       },
     ],

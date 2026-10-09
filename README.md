@@ -38,6 +38,7 @@ Shared across both: navbar, light/dark theme, loading skeletons and image placeh
 | TypeScript | 5 |
 | Tailwind CSS | 4 |
 | Vitest | 5 |
+| Testing Library (React) + happy-dom | 16 / 20 |
 | Yarn workspaces | 1.22.22 |
 
 ## Getting started
@@ -124,7 +125,7 @@ Each zone keeps its feature code in `src/features/<zone>/`, and its data layer f
 | **Separation of concerns** | Layered data folders per zone (table above); generic code in `packages/`, domain code stays in each zone. |
 | **Responsive** | Tailwind breakpoints plus a custom `fit-screen` variant (`apps/*/src/app/globals.css`) used by `packages/ui/src/CatalogLayout`. |
 | **Documentation** | This README and a short README per app (`apps/*/README.md`). |
-| **Unit tests** | Vitest, configured per project in `vitest.config.mts`. See [Testing](#testing). |
+| **Unit tests** | Vitest projects in `vitest.config.mts`: logic tests run in Node, hook and component tests (Testing Library) run in happy-dom. See [Testing](#testing). |
 | **No ready-made UI components** | All components in `packages/ui/src/` are hand-written with Tailwind; no component library is installed. |
 
 ## Key decisions
@@ -180,7 +181,7 @@ Env values are read at build time (rewrites, `NEXT_PUBLIC_*` inlining, the prere
 yarn test
 ```
 
-147 tests in 19 files, all passing. They cover:
+160 tests in 22 files, all passing. They cover:
 
 - **Mappers:** PokéAPI → domain types, including missing data (`data/mappers/*.test.ts`).
 - **Search and pagination:** query normalization, filtering, page slicing (`data/services/search.test.ts`, `packages/shared/src/utils/pagination.test.ts`, `page-items.test.ts`).
@@ -189,14 +190,16 @@ yarn test
 - **Actions:** read-only rejection and error messages (`data/actions/*-actions.test.ts`).
 - **Service:** the berry list makes exactly one PokéAPI request (`berry-service.test.ts`).
 - **Shared utils:** storage errors, host URLs, search params, text helpers (`packages/shared/src/utils/*.test.ts`).
+- **Hooks:** `useDebounce` with fake timers, `useUpdateSearchParams` with a mocked router (`packages/shared/src/hooks/*.test.ts`).
+- **Components:** `Pagination` ellipses, `aria-current`, disabled Previous/Next and links that keep `q` (`packages/ui/src/Pagination/Pagination.test.tsx`).
 
-React components and hooks don't have tests yet.
+Logic tests run in Node; hook and component tests run in a separate `dom` project with happy-dom (`vitest.config.mts`).
 
 ## Future improvements
 
 - Persistent storage (Postgres or a KV store) behind the existing repository interface, so add/delete works on the deploy.
 - End-to-end tests (e.g. Playwright) for search, pagination and the add/delete flow through the host.
-- Component and hook tests with Testing Library.
+- More component tests (forms, search input, delete dialog).
 - A real 404 status for unknown names, by resolving the name before the page streams.
 
 ## Credits
