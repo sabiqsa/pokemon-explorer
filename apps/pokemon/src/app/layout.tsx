@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pokémon Explorer",
+  title: { default: "Pokémon Explorer", template: "%s · Pokémon Explorer" },
   description: "Browse, search and add pokemon.",
 };
 

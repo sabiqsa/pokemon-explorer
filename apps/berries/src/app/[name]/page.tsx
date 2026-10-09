@@ -1,4 +1,5 @@
 import { BackLink, Badge, ConfirmDeleteButton, ImageWithFallback } from "@pokedex/ui";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { BerryDetailSkeleton } from "@/features/berries/components/BerryDetailSkeleton";
@@ -7,6 +8,18 @@ import { FlavorBar } from "@/features/berries/components/FlavorBar";
 import { getBerryDetail, isCustomStorageReadOnly } from "@/features/berries/data/services/berry-service";
 import { EMPTY_VALUE } from "@/features/berries/config/constants";
 import { berryDisplayName, displayId, formatValue } from "@/features/berries/utils/helper";
+
+type DetailParams = PageProps<"/[name]">["params"];
+
+async function nameFromParams(params: DetailParams): Promise<string> {
+  const { name } = await params;
+  return decodeURIComponent(name).toLowerCase();
+}
+
+export async function generateMetadata({ params }: PageProps<"/[name]">): Promise<Metadata> {
+  const berry = await getBerryDetail(await nameFromParams(params));
+  return { title: berry ? berryDisplayName(berry.name) : "Not found" };
+}
 
 export default function BerryDetailPage({ params }: PageProps<"/[name]">) {
   return (
@@ -20,8 +33,7 @@ export default function BerryDetailPage({ params }: PageProps<"/[name]">) {
 }
 
 async function BerryDetail({ params }: Pick<PageProps<"/[name]">, "params">) {
-  const { name } = await params;
-  const berry = await getBerryDetail(decodeURIComponent(name).toLowerCase());
+  const berry = await getBerryDetail(await nameFromParams(params));
   if (!berry) notFound();
 
   const facts = [

@@ -1,5 +1,6 @@
 import { displayName } from "@pokedex/shared";
 import { BackLink, ConfirmDeleteButton, ImageWithFallback } from "@pokedex/ui";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { displayId } from "@/features/pokemon/utils/helper";
@@ -8,6 +9,18 @@ import { PokemonDetailSkeleton } from "@/features/pokemon/components/PokemonDeta
 import { StatBar } from "@/features/pokemon/components/StatBar";
 import { TypeBadge } from "@/features/pokemon/components/TypeBadge";
 import { getPokemonDetail, isCustomStorageReadOnly } from "@/features/pokemon/data/services/pokemon-service";
+
+type DetailParams = PageProps<"/[name]">["params"];
+
+async function nameFromParams(params: DetailParams): Promise<string> {
+  const { name } = await params;
+  return decodeURIComponent(name).toLowerCase();
+}
+
+export async function generateMetadata({ params }: PageProps<"/[name]">): Promise<Metadata> {
+  const pokemon = await getPokemonDetail(await nameFromParams(params));
+  return { title: pokemon ? displayName(pokemon.name) : "Not found" };
+}
 
 export default function PokemonDetailPage({ params }: PageProps<"/[name]">) {
   return (
@@ -21,8 +34,7 @@ export default function PokemonDetailPage({ params }: PageProps<"/[name]">) {
 }
 
 async function PokemonDetail({ params }: Pick<PageProps<"/[name]">, "params">) {
-  const { name } = await params;
-  const pokemon = await getPokemonDetail(decodeURIComponent(name).toLowerCase());
+  const pokemon = await getPokemonDetail(await nameFromParams(params));
   if (!pokemon) notFound();
 
   return (

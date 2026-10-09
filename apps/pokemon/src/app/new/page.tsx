@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import { BackLink, StorageReadOnlyNotice } from "@pokedex/ui";
 import { PokemonForm } from "@/features/pokemon/components/PokemonForm";
 import { getTypeNames, isCustomStorageReadOnly } from "@/features/pokemon/data/services/pokemon-service";
+
+export const metadata: Metadata = { title: "Add custom Pokémon" };
 
 export default async function NewPokemonPage() {
   const types = await getTypeNames();

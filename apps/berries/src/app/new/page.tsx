@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import { BackLink, StorageReadOnlyNotice } from "@pokedex/ui";
 import { BerryForm } from "@/features/berries/components/BerryForm";
 import { getFirmnessNames, isCustomStorageReadOnly } from "@/features/berries/data/services/berry-service";
+
+export const metadata: Metadata = { title: "Add custom berry" };
 
 export default async function NewBerryPage() {
   const firmnesses = await getFirmnessNames();
