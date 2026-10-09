@@ -160,6 +160,7 @@ Details are cached after mapping, not as raw responses (a raw Pokémon or berry 
 
 - **Hard navigation between zones.** Links across zones use plain `<a>`, so moving between Pokémon and Berries is a full page load.
 - **Zones are meant to be reached through the host.** Navbar links are built from `NEXT_PUBLIC_HOST_URL`, so they still point to the host when a zone is opened on its own domain.
+- **Links inside a zone don't prefetch.** On Vercel, segment prefetch requests (`Next-Router-Segment-Prefetch`) sent through the host hit the host's own segment routing and return 404 before the rewrite to the zone runs. Links use `prefetch={false}`, so each navigation waits for the server and shows its loading state.
 - **Not-found returns HTTP 200.** `notFound()` runs inside `<Suspense>` while the page streams, so the "not found" UI renders but the status code is already 200.
 - **JSON storage does not work on serverless.** The demo sets `CUSTOM_STORAGE_READONLY=true` to disable writes with a clear message. For production, swap the repository implementation for a database or KV store; services and actions stay the same.
 - **The Pokémon list mirrors `/pokemon` as is,** including alternate forms. Entries without official artwork show a fallback.

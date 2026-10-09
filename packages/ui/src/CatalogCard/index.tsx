@@ -13,7 +13,7 @@ type CatalogCardProps = {
 
 export function CatalogCard({ href, name, imageUrl, isCustom, pixelated = false }: CatalogCardProps) {
   return (
-    <Link href={href} className="group block h-full rounded-xl">
+    <Link prefetch={false} href={href} className="group block h-full rounded-xl">
       <Card className="relative flex h-full flex-col items-center gap-2 transition-[border-color,box-shadow] group-hover:border-zinc-400 group-hover:shadow-md fit-screen:gap-1 fit-screen:p-2 dark:group-hover:border-zinc-600">
         <ImageWithFallback
           src={imageUrl}

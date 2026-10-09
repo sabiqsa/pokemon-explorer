@@ -37,7 +37,7 @@ function StepLink({ direction, href }: { direction: 'prev' | 'next'; href: strin
     );
   }
   return (
-    <Link href={href} className={linkClass} rel={direction} aria-label={label}>
+    <Link prefetch={false} href={href} className={linkClass} rel={direction} aria-label={label}>
       <LinkPending>
         <Arrow direction={direction} />
       </LinkPending>
@@ -79,7 +79,7 @@ export function Pagination({ page, totalPages, hrefForPage }: PaginationProps) {
                   {item}
                 </span>
               ) : (
-                <Link href={hrefForPage(item)} className={linkClass} aria-label={`Page ${item}`}>
+                <Link prefetch={false} href={hrefForPage(item)} className={linkClass} aria-label={`Page ${item}`}>
                   <LinkPending>{item}</LinkPending>
                 </Link>
               )}
