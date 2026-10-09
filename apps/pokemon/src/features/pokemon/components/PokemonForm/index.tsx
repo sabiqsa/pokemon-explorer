@@ -97,7 +97,7 @@ export function PokemonForm({ types, readOnly = false }: { types: string[]; read
           {STAT_NAMES.map((stat) => (
             <div key={stat} className="flex flex-col gap-1">
               <label htmlFor={stat} className="text-sm capitalize text-zinc-600 dark:text-zinc-400">
-                {stat.replace("-", " ")}
+                {stat === "hp" ? "HP" : stat.replace("-", " ")}
               </label>
               <Input
                 id={stat}
