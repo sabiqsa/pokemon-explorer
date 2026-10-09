@@ -19,7 +19,7 @@
     "dev": "concurrently \"yarn workspace host dev\" \"yarn workspace pokemon dev\" \"yarn workspace berries dev\"",
     "build": "yarn workspace host build && yarn workspace pokemon build && yarn workspace berries build",
     "typecheck": "yarn workspaces run typecheck",
-    "lint": "yarn workspace host lint && yarn workspace pokemon lint && yarn workspace berries lint",
+    "lint": "yarn workspaces run lint",
     "test": "vitest run",
     "test:watch": "vitest"
   }

@@ -13,9 +13,12 @@
     "react": "^19"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint"
   },
   "devDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": "16.4.0",
     "typescript": "^5"
   }
 }

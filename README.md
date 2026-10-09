@@ -74,7 +74,7 @@ Run from the repo root:
 | --- | --- |
 | `yarn dev` | Runs host, pokemon and berries together (`concurrently`). |
 | `yarn typecheck` | Type-checks every workspace (`apps/*` run `next typegen` first, so it works on a fresh clone). |
-| `yarn lint` | ESLint for every app. |
+| `yarn lint` | ESLint for every workspace, including `packages/ui` and `packages/shared`. |
 | `yarn test` | Runs every unit test once (Vitest). |
 | `yarn test:watch` | Vitest in watch mode. |
 | `yarn build` | Production build of host, pokemon and berries. `packages/*` are source-only and get compiled by the apps. |
