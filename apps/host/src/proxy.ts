@@ -15,7 +15,7 @@ export const config = {
   matcher: [
     {
       source: "/:zone(pokemon|berries)/:path*",
-      has: [{ type: "header", key: "next-router-segment-prefetch" }],
+      has: [{ type: "header", key: "rsc" }],
     },
   ],
 };
