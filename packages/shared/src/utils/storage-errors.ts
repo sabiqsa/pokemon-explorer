@@ -1,7 +1,7 @@
 export const STORAGE_READ_ONLY_MESSAGE =
   "Custom entries can't be saved on this demo deployment because storage is read-only. Run the app locally to try this feature.";
 export const GENERIC_SAVE_ERROR_MESSAGE = 'Something went wrong while saving. Please try again.';
-export const REPO_README_URL = 'https://github.com/sabiqsa/pokemon-explorer#readme';
+export const REPO_README_URL = 'https://github.com/sabiqsa/pokemon-explorer#getting-started';
 
 const READ_ONLY_CODES = new Set(['EROFS', 'EACCES', 'EPERM']);
 
