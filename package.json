@@ -1,0 +1,26 @@
+{
+  "name": "pokemon-explorer",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "concurrently": "^10.0.5",
+    "happy-dom": "^20.14.6",
+    "vite": "^8",
+    "vitest": "^5.0.3"
+  },
+  "scripts": {
+    "dev": "concurrently \"yarn workspace host dev\" \"yarn workspace pokemon dev\" \"yarn workspace berries dev\"",
+    "build": "yarn workspace host build && yarn workspace pokemon build && yarn workspace berries build",
+    "typecheck": "yarn workspaces run typecheck",
+    "lint": "yarn workspaces run lint",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  }
+}
